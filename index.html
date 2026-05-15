@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>initで学ぶLinuxランレベル体験</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="main-column">
+        <header class="hero" aria-labelledby="page-title">
+          <div>
+            <p class="eyebrow">BROWSER-ONLY SIMULATOR</p>
+            <h1 id="page-title">Linux ランレベル学習シミュレータ</h1>
+          </div>
+          <span class="login-pill">未ログイン</span>
+        </header>
+
+        <section class="panel lesson-panel" aria-labelledby="lesson-title">
+          <div class="section-heading">
+            <p class="step-label">LESSON FILE</p>
+            <h2 id="lesson-title">initコマンドでランレベルを変更する</h2>
+          </div>
+          <p class="panel-copy">
+            root端末で <code>init 0</code>、<code>init 1</code>、<code>init 3</code>、
+            <code>init 5</code>、<code>init 6</code> を実行し、Linuxの状態変化を確認します。
+          </p>
+          <div class="lesson-divider"></div>
+          <p class="muted-line">サーバは使わず、HTMLとブラウザだけで動作します。</p>
+        </section>
+
+        <section class="simulator-grid" aria-label="ランレベル体験シミュレータ">
+          <section class="panel command-panel" aria-labelledby="command-title">
+            <div class="section-heading">
+              <p class="step-label">STEP 1</p>
+              <h2 id="command-title">initコマンドを入力</h2>
+            </div>
+            <p class="panel-copy">ボタンで選ぶか、端末欄に直接入力してください。</p>
+
+            <div class="command-shortcuts" aria-label="initコマンドの候補">
+              <button type="button" data-command="init 0">init 0</button>
+              <button type="button" data-command="init 1">init 1</button>
+              <button class="selected" type="button" data-command="init 3">init 3</button>
+              <button type="button" data-command="init 5">init 5</button>
+              <button type="button" data-command="init 6">init 6</button>
+            </div>
+
+            <label class="command-label" for="command-input">root端末</label>
+            <div class="command-input-row">
+              <span aria-hidden="true">#</span>
+              <input id="command-input" type="text" value="init 3" spellcheck="false" autocomplete="off">
+            </div>
+
+            <div class="control-row">
+              <button class="primary-action" id="run-button" type="button">実行する</button>
+              <button class="secondary-action" id="reset-button" type="button">やり直す</button>
+            </div>
+            <p class="hint" id="input-hint">入力例: init 5</p>
+          </section>
+
+          <section class="panel status-panel" aria-labelledby="status-title">
+            <div class="section-heading">
+              <p class="step-label">STEP 3</p>
+              <h2 id="status-title">現在の状態</h2>
+            </div>
+            <div class="state-card" id="state-card">
+              <p class="state-kicker" id="state-kicker">Selected command / init 3</p>
+              <h3 id="state-title">Runlevel 3</h3>
+              <p id="state-summary">ネットワークありのCUIマルチユーザー環境として起動します。</p>
+            </div>
+            <div class="service-list" id="service-list" aria-label="起動する主なサービス"></div>
+          </section>
+
+          <section class="panel terminal-panel" aria-labelledby="terminal-title">
+            <div class="section-heading">
+              <p class="step-label">STEP 2</p>
+              <h2 id="terminal-title">起動ログ</h2>
+            </div>
+            <div class="terminal-toolbar" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <pre class="terminal" id="boot-log" aria-live="polite">root端末で init 数字 を実行してください。
+
+例:
+# init 3</pre>
+          </section>
+
+          <section class="panel visual-panel" aria-labelledby="visual-title">
+            <div class="section-heading">
+              <p class="step-label">STEP 4</p>
+              <h2 id="visual-title">見た目の変化</h2>
+            </div>
+            <div class="screen-preview" id="screen-preview" aria-live="polite"></div>
+          </section>
+
+          <section class="panel explanation-panel" aria-labelledby="explanation-title">
+            <div class="section-heading">
+              <p class="step-label">REFERENCE</p>
+              <h2 id="explanation-title">簡単な解説</h2>
+            </div>
+            <article id="explanation">
+              <h3>Runlevel 3: multi-user text</h3>
+              <p>
+                複数ユーザーが使えるCUI環境です。サーバ管理ではGUIを起動せず、
+                端末ログインで操作する場面をイメージするとわかりやすいです。
+              </p>
+            </article>
+            <p class="modern-note">
+              補足: 現在のLinuxではsystemd targetで同じような起動状態を扱う環境も多くあります。
+            </p>
+          </section>
+        </section>
+      </section>
+
+      <aside class="scenario-sidebar" aria-labelledby="scenario-title">
+        <p class="eyebrow">SCENARIOS</p>
+        <h2 id="scenario-title">シナリオ</h2>
+        <nav class="scenario-nav" aria-label="学習シナリオ">
+          <a class="active" href="#command-title">ランレベル変更</a>
+          <a href="#terminal-title">起動ログ確認</a>
+          <a href="#visual-title">画面状態確認</a>
+          <a href="#status-title">サービス確認</a>
+          <a href="#explanation-title">解説</a>
+        </nav>
+      </aside>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
