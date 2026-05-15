@@ -40,17 +40,20 @@ code {
 
 .app-shell {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 345px;
+  grid-template-areas: "sidebar main";
+  grid-template-columns: 345px minmax(0, 1fr);
   min-height: 100vh;
 }
 
 .main-column {
+  grid-area: main;
   padding: 24px 28px 36px 18px;
 }
 
 .scenario-sidebar {
   background: #fbfdfb;
-  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  grid-area: sidebar;
   padding: 26px 32px;
 }
 
@@ -550,16 +553,20 @@ h2 {
 
 @media (max-width: 1060px) {
   .app-shell {
+    grid-template-areas:
+      "sidebar"
+      "main";
     grid-template-columns: 1fr;
   }
 
   .main-column {
+    padding-left: 18px;
     padding-right: 18px;
   }
 
   .scenario-sidebar {
-    border-left: 0;
-    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    border-right: 0;
   }
 }
 

@@ -139,7 +139,7 @@ const serviceList = document.querySelector("#service-list");
 const screenPreview = document.querySelector("#screen-preview");
 const explanation = document.querySelector("#explanation");
 
-let selectedRunlevel = "3";
+let selectedRunlevel = "0";
 let logTimer = null;
 
 function getRunlevelFromCommand(command) {
@@ -310,8 +310,12 @@ function resetExperience() {
   clearInterval(logTimer);
   runButton.disabled = false;
   runButton.textContent = "実行する";
-  setCommand(runlevels[selectedRunlevel].command);
-  bootLog.textContent = `root端末で init 数字 を実行してください。\n\n例:\n# ${runlevels[selectedRunlevel].command}`;
+  commandInput.value = "";
+  updateShortcutSelection(runlevels[selectedRunlevel].command);
+  renderRunlevel(selectedRunlevel);
+  inputHint.textContent = "入力例: init 5";
+  inputHint.classList.remove("error");
+  bootLog.textContent = `ターミナルで init 数字 を実行してください。\n\n例:\n# ${runlevels[selectedRunlevel].command}`;
 }
 
 shortcutButtons.forEach((button) => {
@@ -333,6 +337,19 @@ commandInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     runCommand();
   }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter") {
+    return;
+  }
+
+  const activeTag = document.activeElement?.tagName;
+  if (["A", "BUTTON", "INPUT"].includes(activeTag)) {
+    return;
+  }
+
+  runCommand();
 });
 
 runButton.addEventListener("click", runCommand);

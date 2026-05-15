@@ -23,11 +23,9 @@
             <h2 id="lesson-title">initコマンドでランレベルを変更する</h2>
           </div>
           <p class="panel-copy">
-            root端末で <code>init 0</code>、<code>init 1</code>、<code>init 3</code>、
+            ターミナルで <code>init 0</code>、<code>init 1</code>、<code>init 3</code>、
             <code>init 5</code>、<code>init 6</code> を実行し、Linuxの状態変化を確認します。
           </p>
-          <div class="lesson-divider"></div>
-          <p class="muted-line">サーバは使わず、HTMLとブラウザだけで動作します。</p>
         </section>
 
         <section class="simulator-grid" aria-label="ランレベル体験シミュレータ">
@@ -39,17 +37,17 @@
             <p class="panel-copy">ボタンで選ぶか、端末欄に直接入力してください。</p>
 
             <div class="command-shortcuts" aria-label="initコマンドの候補">
-              <button type="button" data-command="init 0">init 0</button>
+              <button class="selected" type="button" data-command="init 0">init 0</button>
               <button type="button" data-command="init 1">init 1</button>
-              <button class="selected" type="button" data-command="init 3">init 3</button>
+              <button type="button" data-command="init 3">init 3</button>
               <button type="button" data-command="init 5">init 5</button>
               <button type="button" data-command="init 6">init 6</button>
             </div>
 
-            <label class="command-label" for="command-input">root端末</label>
+            <label class="command-label" for="command-input">ターミナル</label>
             <div class="command-input-row">
               <span aria-hidden="true">#</span>
-              <input id="command-input" type="text" value="init 3" spellcheck="false" autocomplete="off">
+              <input id="command-input" type="text" value="" spellcheck="false" autocomplete="off">
             </div>
 
             <div class="control-row">
@@ -65,9 +63,9 @@
               <h2 id="status-title">現在の状態</h2>
             </div>
             <div class="state-card" id="state-card">
-              <p class="state-kicker" id="state-kicker">Selected command / init 3</p>
-              <h3 id="state-title">Runlevel 3</h3>
-              <p id="state-summary">ネットワークありのCUIマルチユーザー環境として起動します。</p>
+              <p class="state-kicker" id="state-kicker">Selected command / init 0</p>
+              <h3 id="state-title">Runlevel 0</h3>
+              <p id="state-summary">システムを停止します。ログイン画面には到達しません。</p>
             </div>
             <div class="service-list" id="service-list" aria-label="起動する主なサービス"></div>
           </section>
@@ -82,10 +80,10 @@
               <span></span>
               <span></span>
             </div>
-            <pre class="terminal" id="boot-log" aria-live="polite">root端末で init 数字 を実行してください。
+            <pre class="terminal" id="boot-log" aria-live="polite">ターミナルで init 数字 を実行してください。
 
 例:
-# init 3</pre>
+# init 0</pre>
           </section>
 
           <section class="panel visual-panel" aria-labelledby="visual-title">
@@ -102,10 +100,10 @@
               <h2 id="explanation-title">簡単な解説</h2>
             </div>
             <article id="explanation">
-              <h3>Runlevel 3: multi-user text</h3>
+              <h3>Runlevel 0: halt / システム停止</h3>
               <p>
-                複数ユーザーが使えるCUI環境です。サーバ管理ではGUIを起動せず、
-                端末ログインで操作する場面をイメージするとわかりやすいです。
+                init 0は停止処理です。サービスを止め、ファイルシステムを安全に処理し、
+                最後に電源断できる状態へ向かいます。
               </p>
             </article>
             <p class="modern-note">
@@ -116,9 +114,9 @@
       </section>
 
       <aside class="scenario-sidebar" aria-labelledby="scenario-title">
-        <p class="eyebrow">SCENARIOS</p>
-        <h2 id="scenario-title">シナリオ</h2>
-        <nav class="scenario-nav" aria-label="学習シナリオ">
+        <p class="eyebrow">LEARNING STEPS</p>
+        <h2 id="scenario-title">学習ステップ</h2>
+        <nav class="scenario-nav" aria-label="学習ステップ">
           <a class="active" href="#command-title">ランレベル変更</a>
           <a href="#terminal-title">起動ログ確認</a>
           <a href="#visual-title">画面状態確認</a>
