@@ -121,8 +121,21 @@ const runlevels = {
       "Stopping network: [  OK  ]",
       "Unmounting local filesystems: [  OK  ]",
       "Restarting system.",
+      "",
+      "--- shutdown phase complete ---",
+      "BIOS/UEFI: Power on self-test complete",
+      "Boot loader: Loading Linux kernel",
+      "systemd: Reached target Basic System",
+      "systemd: Starting graphical target",
+      "Starting network: [  OK  ]",
+      "Starting accounts-daemon: [  OK  ]",
+      "Starting display manager: [  OK  ]",
+      "gdm.service: Started GNOME Display Manager.",
+      "Reached runlevel 5: graphical login is ready.",
     ],
-    visual: "reboot",
+    visual: "gdm-reboot-complete",
+    intermediateVisual: "reboot",
+    completedRunlevel: "5",
   },
 };
 
@@ -169,8 +182,11 @@ function updateShortcutSelection(command) {
 function renderRunlevel(level, options = {}) {
   const data = runlevels[level];
   const shouldShowVisual = options.showVisual === true;
+  const sourceCommand = options.sourceCommand;
 
-  stateKicker.textContent = `Selected command / ${data.command}`;
+  stateKicker.textContent = sourceCommand
+    ? `Completed ${sourceCommand} / now at ${data.command}`
+    : `Selected command / ${data.command}`;
   stateTitle.textContent = data.title;
   stateSummary.textContent = data.summary;
   serviceList.innerHTML = data.services
@@ -206,6 +222,24 @@ function renderWaitingVisual(command) {
 }
 
 function renderVisual(type) {
+  if (type === "gdm-reboot-complete") {
+    return `
+      <div class="gdm-screen" role="img" aria-label="AlmaLinux graphical login after reboot">
+        <div class="gdm-topbar">
+          <span>5譛・6譌･ 蝨滓屆譌･ 10:00</span>
+          <span>ja JP  繝阪ャ繝医Ρ繝ｼ繧ｯ  髮ｻ貅・/span>
+        </div>
+        <div class="gdm-card">
+          <div class="gdm-avatar" aria-hidden="true"></div>
+          <h3>Runlevel 5</h3>
+          <p>Graphical login after init 6 reboot</p>
+          <div class="gdm-password">GDM login screen is ready</div>
+        </div>
+        <div class="gdm-brand">REBOOT COMPLETE / RUNLEVEL 5</div>
+      </div>
+    `;
+  }
+
   if (type === "gdm") {
     return `
       <div class="gdm-screen" role="img" aria-label="AlmaLinuxのGDM風ログイン画面">
@@ -295,10 +329,18 @@ function runCommand() {
   logTimer = setInterval(() => {
     bootLog.textContent += `${lines[index]}\n`;
     bootLog.scrollTop = bootLog.scrollHeight;
+    if (runlevels[level].intermediateVisual && lines[index] === "Restarting system.") {
+      screenPreview.innerHTML = renderVisual(runlevels[level].intermediateVisual);
+    }
     index += 1;
 
     if (index >= lines.length) {
       clearInterval(logTimer);
+      const finalLevel = runlevels[level].completedRunlevel || level;
+      renderRunlevel(finalLevel, {
+        showVisual: true,
+        sourceCommand: finalLevel === level ? null : runlevels[level].command,
+      });
       screenPreview.innerHTML = renderVisual(runlevels[level].visual);
       runButton.disabled = false;
       runButton.textContent = "実行する";
