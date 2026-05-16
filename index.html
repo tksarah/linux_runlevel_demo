@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>initで学ぶLinuxランレベル体験</title>
+    <title>Linux runlevel / systemd target 学習シミュレータ</title>
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
@@ -12,39 +12,78 @@
         <header class="hero" aria-labelledby="page-title">
           <div>
             <p class="eyebrow">BROWSER-ONLY SIMULATOR</p>
-            <h1 id="page-title">Linux ランレベル学習シミュレータ</h1>
+            <h1 id="page-title">Linux runlevel / systemd target 学習シミュレータ</h1>
           </div>
-          <span class="login-pill">未ログイン</span>
+          <span class="login-pill">学習用デモ</span>
         </header>
 
         <section class="panel lesson-panel" aria-labelledby="lesson-title">
           <div class="section-heading">
             <p class="step-label">LESSON FILE</p>
-            <h2 id="lesson-title">initコマンドでランレベルを変更する</h2>
+            <h2 id="lesson-title">起動前の GRUB2 指定と、起動後の init / systemctl 遷移を学ぶ</h2>
           </div>
           <p class="panel-copy">
-            ターミナルで <code>init 0</code>、<code>init 1</code>、<code>init 3</code>、
-            <code>init 5</code>、<code>init 6</code> を実行し、Linuxの状態変化を確認します。
+            STEP 0 では GRUB2 の編集モードから <code>rescue.target</code> などを指定して起動します。
+            STEP 1 以降では、Linux が起動している状態で <code>init</code> または <code>systemctl</code>
+            を実行した時の状態変化を確認します。
           </p>
         </section>
 
-        <section class="simulator-grid" aria-label="ランレベル体験シミュレータ">
+        <section class="panel grub-panel" aria-labelledby="grub-title">
+          <div class="section-heading">
+            <p class="step-label">STEP 0</p>
+            <h2 id="grub-title">GRUB2 の編集モードで target を指定して起動</h2>
+          </div>
+          <div class="grub-layout">
+            <div>
+              <p class="panel-copy">
+                最初は GRUB メニューが表示されています。<kbd>e</kbd> を押して編集モードに入り、
+                <code>linux</code> 行の末尾に <code>systemd.unit=target名</code> を手動で入力します。
+              </p>
+              <div class="target-reference" aria-label="入力できる systemd target">
+                <code>systemd.unit=rescue.target</code>
+                <code>systemd.unit=emergency.target</code>
+                <code>systemd.unit=multi-user.target</code>
+                <code>systemd.unit=graphical.target</code>
+              </div>
+              <button class="secondary-action full-action" id="grub-edit-button" type="button">e を押して編集</button>
+              <label class="command-label" for="grub-target-input">linux 行の末尾に追加する文字列</label>
+              <div class="command-input-row">
+                <span aria-hidden="true">...</span>
+                <input id="grub-target-input" type="text" value="" spellcheck="false" autocomplete="off" disabled>
+              </div>
+              <div class="control-row">
+                <button class="primary-action" id="grub-boot-button" type="button" disabled>Ctrl + X / F10 で起動</button>
+                <button class="secondary-action" id="grub-reset-button" type="button">GRUB 表示に戻す</button>
+              </div>
+              <p class="hint" id="grub-hint">まず e を押して編集モードに入ります。</p>
+            </div>
+            <div class="grub-preview" id="grub-preview" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <section class="simulator-grid" aria-label="init と systemctl によるランレベル学習シミュレータ">
           <section class="panel command-panel" aria-labelledby="command-title">
             <div class="section-heading">
               <p class="step-label">STEP 1</p>
-              <h2 id="command-title">initコマンドを入力</h2>
+              <h2 id="command-title">起動後の Linux で init / systemctl コマンドを入力</h2>
             </div>
-            <p class="panel-copy">ボタンで選ぶか、端末欄に直接入力してください。</p>
+            <p class="panel-copy">Linux が起動済みの状態を前提に、init または対応する systemctl コマンドを実行します。</p>
 
-            <div class="command-shortcuts" aria-label="initコマンドの候補">
+            <div class="command-shortcuts" aria-label="init と systemctl コマンドの候補">
               <button class="selected" type="button" data-command="init 0">init 0</button>
               <button type="button" data-command="init 1">init 1</button>
               <button type="button" data-command="init 3">init 3</button>
               <button type="button" data-command="init 5">init 5</button>
               <button type="button" data-command="init 6">init 6</button>
+              <button type="button" data-command="systemctl poweroff">systemctl poweroff</button>
+              <button type="button" data-command="systemctl rescue">systemctl rescue</button>
+              <button type="button" data-command="systemctl isolate multi-user.target">systemctl isolate multi-user.target</button>
+              <button type="button" data-command="systemctl isolate graphical.target">systemctl isolate graphical.target</button>
+              <button type="button" data-command="systemctl reboot">systemctl reboot</button>
             </div>
 
-            <label class="command-label" for="command-input">ターミナル</label>
+            <label class="command-label" for="command-input">端末</label>
             <div class="command-input-row">
               <span aria-hidden="true">#</span>
               <input id="command-input" type="text" value="" spellcheck="false" autocomplete="off">
@@ -54,7 +93,7 @@
               <button class="primary-action" id="run-button" type="button">実行する</button>
               <button class="secondary-action" id="reset-button" type="button">やり直す</button>
             </div>
-            <p class="hint" id="input-hint">入力例: init 5</p>
+            <p class="hint" id="input-hint">入力例: init 5 / systemctl isolate graphical.target</p>
           </section>
 
           <section class="panel status-panel" aria-labelledby="status-title">
@@ -80,7 +119,7 @@
               <span></span>
               <span></span>
             </div>
-            <pre class="terminal" id="boot-log" aria-live="polite">ターミナルで init 数字 を実行してください。
+            <pre class="terminal" id="boot-log" aria-live="polite">端末で init 数字を実行してください。
 
 例:
 # init 0</pre>
@@ -101,13 +140,11 @@
             </div>
             <article id="explanation">
               <h3>Runlevel 0: halt / システム停止</h3>
-              <p>
-                init 0は停止処理です。サービスを止め、ファイルシステムを安全に処理し、
-                最後に電源断できる状態へ向かいます。
-              </p>
+              <p>init 0 は停止処理です。サービスを止め、ファイルシステムを安全に処理し、電源断できる状態へ向かいます。</p>
             </article>
             <p class="modern-note">
-              補足: 現在のLinuxではsystemd targetで同じような起動状態を扱う環境も多くあります。
+              補足: 現在の Linux では systemd target で同じような起動状態を扱う環境が多くあります。
+              GRUB2 から target を指定すると、起動直後から目的の target に入れます。
             </p>
           </section>
         </section>
@@ -117,7 +154,8 @@
         <p class="eyebrow">LEARNING STEPS</p>
         <h2 id="scenario-title">学習ステップ</h2>
         <nav class="scenario-nav" aria-label="学習ステップ">
-          <a class="active" href="#command-title">ランレベル変更</a>
+          <a class="active" href="#grub-title">GRUB2 で target 指定</a>
+          <a href="#command-title">起動後の init 実行</a>
           <a href="#terminal-title">起動ログ確認</a>
           <a href="#visual-title">画面状態確認</a>
           <a href="#status-title">サービス確認</a>

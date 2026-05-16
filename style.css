@@ -70,7 +70,7 @@ code {
   color: #425951;
   font-size: 0.76rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   margin: 0 0 6px;
 }
 
@@ -83,14 +83,14 @@ p {
 
 h1 {
   font-size: clamp(2rem, 4vw, 2.35rem);
-  letter-spacing: -0.04em;
+  letter-spacing: 0;
   line-height: 1.1;
   margin-bottom: 0;
 }
 
 h2 {
   font-size: 1.17rem;
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 .login-pill {
@@ -110,6 +110,10 @@ h2 {
 }
 
 .lesson-panel {
+  margin-bottom: 16px;
+}
+
+.grub-panel {
   margin-bottom: 16px;
 }
 
@@ -159,14 +163,41 @@ h2 {
   grid-area: explanation;
 }
 
+.grub-layout {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(300px, 0.9fr) minmax(360px, 1.1fr);
+}
+
+.target-shortcuts,
 .command-shortcuts {
   display: grid;
   gap: 8px;
-  grid-template-columns: repeat(5, 1fr);
   margin: 16px 0;
 }
 
+.target-shortcuts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.target-reference {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 16px 0;
+}
+
+.target-reference code {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.command-shortcuts {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .command-shortcuts button,
+.target-shortcuts button,
 .scenario-nav a,
 .secondary-action {
   background: #fff;
@@ -175,16 +206,21 @@ h2 {
   color: var(--ink);
 }
 
-.command-shortcuts button {
+.command-shortcuts button,
+.target-shortcuts button {
   cursor: pointer;
   font-family: "Cascadia Mono", Consolas, "Courier New", monospace;
   font-weight: 700;
+  overflow-wrap: anywhere;
   padding: 10px 8px;
 }
 
 .command-shortcuts button:hover,
 .command-shortcuts button:focus-visible,
-.command-shortcuts button.selected {
+.command-shortcuts button.selected,
+.target-shortcuts button:hover,
+.target-shortcuts button:focus-visible,
+.target-shortcuts button.selected {
   background: var(--green);
   border-color: var(--green);
   color: #fff;
@@ -196,7 +232,7 @@ h2 {
   display: block;
   font-size: 0.78rem;
   font-weight: 800;
-  letter-spacing: 0.06em;
+  letter-spacing: 0;
   margin-bottom: 8px;
 }
 
@@ -216,7 +252,8 @@ h2 {
 .terminal,
 .text-console,
 .power-screen,
-.waiting-screen {
+.waiting-screen,
+.grub-screen {
   font-family: "Cascadia Mono", Consolas, "Courier New", monospace;
 }
 
@@ -229,11 +266,21 @@ h2 {
   outline: none;
 }
 
+.command-input-row input:disabled {
+  color: #708077;
+  cursor: not-allowed;
+}
+
 .control-row {
   display: grid;
   gap: 10px;
   grid-template-columns: 1fr 1fr;
   margin-top: 16px;
+}
+
+.full-action {
+  margin: 0 0 16px;
+  width: 100%;
 }
 
 .primary-action,
@@ -270,6 +317,17 @@ h2 {
 .hint.error {
   color: var(--danger);
   font-weight: 800;
+}
+
+kbd {
+  background: #fff;
+  border: 1px solid #bbc7bf;
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  color: #24322d;
+  font-family: "Cascadia Mono", Consolas, "Courier New", monospace;
+  font-size: 0.86em;
+  padding: 0.08em 0.38em;
 }
 
 .terminal-panel {
@@ -315,7 +373,7 @@ h2 {
   color: var(--green);
   font-size: 0.76rem;
   font-weight: 900;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   margin-bottom: 8px;
 }
 
@@ -362,10 +420,15 @@ h2 {
   min-height: 318px;
 }
 
+.grub-preview {
+  min-height: 340px;
+}
+
 .text-console,
 .power-screen,
 .waiting-screen,
-.gdm-screen {
+.gdm-screen,
+.grub-screen {
   border-radius: 7px;
   min-height: 318px;
   overflow: hidden;
@@ -377,6 +440,56 @@ h2 {
   background: var(--terminal);
   color: #dffce4;
   padding: 22px;
+}
+
+.inline-log {
+  color: var(--terminal-glow);
+  font: inherit;
+  line-height: 1.55;
+  margin: 14px 0 0;
+  white-space: pre-wrap;
+}
+
+.grub-screen {
+  background: #101010;
+  border: 2px solid #bcbcbc;
+  color: #f4f4f4;
+  min-height: 340px;
+  padding: 20px;
+}
+
+.grub-title {
+  color: #f4f4f4;
+  font-weight: 800;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.grub-menu-item {
+  border: 1px solid transparent;
+  padding: 10px 12px;
+}
+
+.grub-menu-item.selected {
+  background: #d9d9d9;
+  color: #101010;
+}
+
+.grub-footer {
+  border-top: 1px solid #777;
+  color: #dedede;
+  font-size: 0.82rem;
+  margin: 28px 0 0;
+  padding-top: 12px;
+}
+
+.edit-mode pre {
+  color: #f0f0f0;
+  font: inherit;
+  line-height: 1.55;
+  margin: 0;
+  overflow: auto;
+  white-space: pre-wrap;
 }
 
 .text-console .prompt-line {
@@ -424,7 +537,7 @@ h2 {
   color: var(--terminal-glow);
   font-size: 0.72rem;
   font-weight: 900;
-  letter-spacing: 0.1em;
+  letter-spacing: 0;
 }
 
 .gdm-screen {
@@ -508,7 +621,7 @@ h2 {
   color: rgba(255, 255, 255, 0.82);
   font-weight: 800;
   justify-self: center;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
 }
 
 #explanation h3 {
@@ -585,6 +698,10 @@ h2 {
       "visual"
       "explanation";
   }
+
+  .grub-layout {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 560px) {
@@ -594,6 +711,8 @@ h2 {
     padding-right: 12px;
   }
 
+  .target-shortcuts,
+  .target-reference,
   .command-shortcuts,
   .control-row {
     grid-template-columns: 1fr;
