@@ -226,8 +226,8 @@ function renderVisual(type) {
     return `
       <div class="gdm-screen" role="img" aria-label="AlmaLinux graphical login after reboot">
         <div class="gdm-topbar">
-          <span>5譛・6譌･ 蝨滓屆譌･ 10:00</span>
-          <span>ja JP  繝阪ャ繝医Ρ繝ｼ繧ｯ  髮ｻ貅・/span>
+          <span>May 16 Sat 10:00</span>
+          <span>ja JP / Network / Power</span>
         </div>
         <div class="gdm-card">
           <div class="gdm-avatar" aria-hidden="true"></div>
